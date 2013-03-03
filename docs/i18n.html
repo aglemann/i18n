@@ -1,0 +1,92 @@
+<!DOCTYPE html>  <html> <head>   <title>i18n.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               i18n.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nx">define</span><span class="p">([</span>
+    <span class="s1">&#39;underscore&#39;</span>
+<span class="p">],</span> 
+<span class="kd">function</span><span class="p">(</span><span class="nx">_</span><span class="p">)</span> <span class="p">{</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Inspired by <a href="https://github.com/fnando/i18n-js">i18n-js</a>.
+Tuned to be used with Java's <a href="http://docs.oracle.com/javase/6/docs/api/java/text/NumberFormat.html">NumberFormat</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">i18n</span> <span class="o">=</span> <span class="p">{</span>
+        </pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h2>l(ocalise)</h2>
+
+<p><code>i18n.l()</code> for localized values, for example: <code>i18n.l('currency', 100)</code>
+which would return "$100.00". Or use the helpers directly
+for more granular control: <code>i18n.l.toCurrency(100, { separator: ',', unit: '¢' })</code>
+which would return "¢100,00" (puravida!).</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">l</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="nx">scope</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">case</span> <span class="s1">&#39;currency&#39;</span><span class="o">:</span>
+                    <span class="k">return</span> <span class="nx">i18n</span><span class="p">.</span><span class="nx">l</span><span class="p">.</span><span class="nx">toCurrency</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+                <span class="k">case</span> <span class="s1">&#39;percentage&#39;</span><span class="o">:</span>
+                    <span class="k">return</span> <span class="nx">i18n</span><span class="p">.</span><span class="nx">l</span><span class="p">.</span><span class="nx">toPercentage</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+                <span class="k">default</span><span class="o">:</span>
+                    <span class="k">return</span> <span class="nx">i18n</span><span class="p">.</span><span class="nx">l</span><span class="p">.</span><span class="nx">toNumber</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        </pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h2>t(ranslate)</h2>
+
+<p><code>i18n.t()</code> for translated strings. Accepts a string <code>key</code>
+and optional parameters for substitution using the <code>{n}</code> pattern.
+For example, if the json has a key/value of <code>get.out: 'get your {0} out of my {1}'</code>
+a usage could be <code>i18n.t('get.out', 'nose', 'business')</code> which would return
+'get your nose out of my business'.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">t</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="p">[].</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nx">str</span> <span class="o">=</span> <span class="nx">i18n</span><span class="p">.</span><span class="nx">t</span><span class="p">.</span><span class="nx">translations</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\{(\d+)\}/g</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">match</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+            <span class="p">});</span>
+        <span class="p">}</span>        
+    <span class="p">};</span>
+    
+    <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">i18n</span><span class="p">.</span><span class="nx">l</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">defaults</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="nx">toCurrency</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">number</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+            <span class="nx">_</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span>
+                <span class="nx">options</span><span class="p">,</span> 
+                <span class="nx">_</span><span class="p">.</span><span class="nx">pick</span><span class="p">(</span><span class="nx">i18n</span><span class="p">.</span><span class="nx">l</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="s1">&#39;precision&#39;</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">),</span>
+                <span class="p">{</span> <span class="nx">format</span><span class="o">:</span> <span class="s1">&#39;\xA4#,##0.00&#39;</span><span class="p">,</span> <span class="nx">precision</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">unit</span><span class="o">:</span> <span class="s1">&#39;$&#39;</span> <span class="p">}</span>
+            <span class="p">);</span>
+            <span class="nx">number</span> <span class="o">=</span> <span class="nx">i18n</span><span class="p">.</span><span class="nx">l</span><span class="p">.</span><span class="nx">toNumber</span><span class="p">(</span><span class="nx">number</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+            <span class="nx">number</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">format</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[^\xA4]+/</span><span class="p">,</span> <span class="nx">number</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\xA4+/</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">unit</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nx">number</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="nx">toNumber</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">number</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">isNegative</span><span class="p">,</span> <span class="nx">parts</span><span class="p">,</span> <span class="nx">format</span><span class="p">,</span> <span class="nx">groupingSize</span><span class="p">,</span> <span class="nx">groupingRE</span><span class="p">;</span>
+            <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+            <span class="nx">_</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span>
+                <span class="nx">options</span><span class="p">,</span> 
+                <span class="nx">_</span><span class="p">.</span><span class="nx">pick</span><span class="p">(</span><span class="nx">i18n</span><span class="p">.</span><span class="nx">l</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="s1">&#39;delimiter&#39;</span><span class="p">,</span> <span class="s1">&#39;separator&#39;</span><span class="p">),</span>
+                <span class="p">{</span> <span class="nx">delimiter</span><span class="o">:</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="nx">format</span><span class="o">:</span> <span class="s1">&#39;\xA4#,##0.00&#39;</span><span class="p">,</span> <span class="nx">precision</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">separator</span><span class="o">:</span> <span class="s1">&#39;.&#39;</span> <span class="p">}</span>
+            <span class="p">);</span>
+            <span class="nx">isNegative</span> <span class="o">=</span> <span class="nx">number</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="nx">parts</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">number</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">precision</span><span class="p">).</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">);</span>
+            <span class="nx">format</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">format</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">);</span>
+            <span class="nx">format</span> <span class="o">=</span> <span class="nx">isNegative</span> <span class="o">?</span> <span class="nx">format</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">||</span> <span class="nx">format</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">:</span> <span class="nx">format</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="nx">groupingSize</span> <span class="o">=</span> <span class="sr">/,([^.]+)\./</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">format</span><span class="p">)</span> <span class="o">?</span> <span class="nb">RegExp</span><span class="p">.</span><span class="nx">$1</span><span class="p">.</span><span class="nx">length</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="nx">groupingRE</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">&#39;\\B(?=(\\d{&#39;</span> <span class="o">+</span> <span class="nx">groupingSize</span> <span class="o">+</span> <span class="s1">&#39;})+(?!\\d))&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">);</span>
+            <span class="nx">number</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">replace</span><span class="p">(</span><span class="nx">groupingRE</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">delimiter</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">precision</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">number</span> <span class="o">+=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">separator</span> <span class="o">+</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">isNegative</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">number</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="nx">number</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">number</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="nx">toPercentage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">number</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+            <span class="nx">_</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span>
+                <span class="nx">options</span><span class="p">,</span>
+                <span class="p">{</span> <span class="nx">delimiter</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">format</span><span class="o">:</span> <span class="s1">&#39;#,##0.0%&#39;</span> <span class="p">}</span>
+            <span class="p">);</span>
+            <span class="nx">number</span> <span class="o">=</span> <span class="nx">i18n</span><span class="p">.</span><span class="nx">l</span><span class="p">.</span><span class="nx">toNumber</span><span class="p">(</span><span class="nx">number</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+            <span class="nx">number</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">format</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[^%]+/</span><span class="p">,</span> <span class="nx">number</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nx">number</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    
+    <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">i18n</span><span class="p">.</span><span class="nx">t</span><span class="p">,</span> <span class="p">{</span> 
+        <span class="nx">translations</span><span class="o">:</span> <span class="p">{}</span> 
+    <span class="p">});</span>
+    
+    <span class="k">return</span> <span class="nx">i18n</span><span class="p">;</span>
+<span class="p">});</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
